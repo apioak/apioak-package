@@ -79,8 +79,8 @@ BUILD_PACKAGE()
         -C /tmp/apioak \
         -p ${ABS_PATH} \
         --url 'https://apioak.com' \
-        --deb-no-default-config-files
-        --pre-install ${ABS_PATH}/ubuntu/install_before.sh
+        --deb-no-default-config-files \
+        --before-install ${ABS_PATH}/ubuntu/install_before.sh
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }
