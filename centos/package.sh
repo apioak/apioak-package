@@ -80,7 +80,9 @@ BUILD_PACKAGE()
         -C /tmp/apioak \
         -p ${ABS_PATH} \
         --url 'https://apioak.com' \
-        --before-install ${ABS_PATH}/centos/install_before.sh
+        -d 'openresty >= 1.15.8.1' \
+        -d 'etcd >= 3.2.2' \
+        -d 'luarocks >= 2.2.2'
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }
