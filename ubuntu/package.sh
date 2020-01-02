@@ -80,7 +80,9 @@ BUILD_PACKAGE()
         -p ${ABS_PATH} \
         --url 'https://apioak.com' \
         --deb-no-default-config-files \
-        --before-install ${ABS_PATH}/ubuntu/install_before.sh
+        -d 'openresty >= 1.15.8.1' \
+        -d 'etcd >= 3.2.2' \
+        -d 'luarocks >= 2.2.2'
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }
