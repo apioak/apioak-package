@@ -12,7 +12,7 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo rm -f /usr/bin/cmake
-    sudo yum -y install gcc gcc-c++ git cmake3 make automake autoconf  curl wget
+    sudo yum -y install gcc gcc-c++ git cmake3 make automake autoconf curl wget
     sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
 }
 
@@ -80,6 +80,7 @@ BUILD_PACKAGE()
         -C /tmp/apioak \
         -p ${ABS_PATH} \
         --url 'https://apioak.com'
+        --pre-install ${ABS_PATH}/centos/install_before.sh
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }

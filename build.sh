@@ -10,10 +10,10 @@ source /etc/profile
 
 if [[ ${SYSTEM_NAME} = "CentOS" ]]; then
     echo "Build APIOAK System : ${SYSTEM_NAME}"
-    . centos/rpm.sh
+    . centos/package.sh
 elif [[ ${SYSTEM_NAME} = "Ubuntu" ]]; then
     echo "Build APIOAK System : ${SYSTEM_NAME}"
-    . ubuntu/deb.sh
+    . ubuntu/package.sh
 else
     echo "Build System Invalid, Only CentOS and Ubuntu are supported"
     exit 1
