@@ -79,8 +79,8 @@ BUILD_PACKAGE()
         --license "Apache License 2.0"  \
         -C /tmp/apioak \
         -p ${ABS_PATH} \
-        --url 'https://apioak.com'
-        --pre-install ${ABS_PATH}/centos/install_before.sh
+        --url 'https://apioak.com' \
+        --before-install ${ABS_PATH}/centos/install_before.sh
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }

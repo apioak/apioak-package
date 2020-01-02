@@ -12,7 +12,7 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo apt-get update
-    sudo apt-get install -y gcc g++ git cmake make automake autoconf pkg-config curl wget
+    sudo apt-get install -y gcc g++ git cmake make automake autoconf pkg-config curl wget etcd
 }
 
 INSTALL_OPENRESTY()
