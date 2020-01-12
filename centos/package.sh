@@ -18,10 +18,11 @@ INSTALL_BASE_TOOLS()
 
 INSTALL_FPM()
 {
-    sudo yum -y install ruby ruby-devel rubygems rubugems-devel rpm-build
+    sudo yum -y install ruby ruby-devel rubygems rubygems-devel rpm-build libffi libffi-devel
     sudo gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
     sudo gem sources -l
     sudo gem update --system
+    sudo gem install ffi
     sudo gem install --no-ri --no-rdoc fpm
 }
 
