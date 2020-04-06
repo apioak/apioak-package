@@ -12,12 +12,12 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo apt-get update
-    sudo apt-get install -y gcc g++ git cmake make automake autoconf pkg-config curl wget
+    sudo apt-get install -y gcc g++ git cmake make automake autoconf pkg-config curl wget libtool libpcre3-dev build-essential
 }
 
 INSTALL_FPM()
 {
-    sudo apt-get install -y ruby ruby-dev rubygems build-essential
+    sudo apt-get install -y ruby ruby-dev rubygems
     sudo gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
     sudo gem sources -l
     sudo gem update --system

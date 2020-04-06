@@ -12,8 +12,7 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo rm -f /usr/bin/cmake
-    sudo yum -y install gcc gcc-c++ git cmake3 make automake autoconf curl wget
-    sudo ln -s /usr/bin/cmake3 /usr/bin/cmake
+    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel
 }
 
 INSTALL_FPM()
