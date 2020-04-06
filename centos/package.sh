@@ -12,7 +12,7 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo rm -f /usr/bin/cmake
-    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel
+    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel redhat-lsb
 }
 
 INSTALL_FPM()
@@ -34,10 +34,7 @@ INSTALL_OPENRESTY()
 
 INSTALL_LUAROCKS()
 {
-    wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    sudo rpm -ivh epel-release-latest-7.noarch.rpm
     sudo yum -y install luarocks
-    sudo rm -f epel-release-latest-7.noarch.rpm
 }
 
 REMOVE_CACHE_PATH()
