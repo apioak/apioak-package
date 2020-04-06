@@ -65,10 +65,14 @@ BUILD_PACKAGE()
 
     git clone -b v${VERSION} https://github.com/apioak/apioak.git
     cd apioak
-    sudo luarocks install rockspec/apioak-master-0.rockspec --tree=/usr/local/apioak/deps --only-deps --local
-    sudo make install
+    sudo luarocks make rockspec/apioak-master-0.rockspec --tree=/usr/local/apioak/deps --local
+
     sudo mkdir -p /tmp/apioak/usr/local
-    sudo mv /usr/local/apioak /tmp/apioak/usr/local/apioak
+    sudo mkdir -p /tmp/apioak/usr/bin
+
+    cp -rf /usr/local/apioak /tmp/apioak/usr/local/
+    cp -rf /usr/local/apioak/bin/apioak /tmp/apioak/usr/bin/
+
     sudo make uninstall
     cd ${ABS_PATH}
 
@@ -76,14 +80,13 @@ BUILD_PACKAGE()
         -m 'Janko <shuaijinchao@gmail.com>' \
         -v ${VERSION} \
         --iteration ${ITERATION}.el7 \
-        --description 'APIOAK provides full life cycle management of API release, management, and operation and maintenance.' \
+        --description 'APIOAK is complete lifecycle management API gateway.' \
         --license "Apache License 2.0"  \
         -C /tmp/apioak \
         -p ${ABS_PATH} \
         --url 'https://apioak.com' \
-        -d 'openresty >= 1.15.8.1' \
-        -d 'etcd >= 3.2.2' \
-        -d 'luarocks >= 2.2.2'
+        -d 'openresty >= 1.15.8.2' \
+        -d 'luarocks >= 2.3.0'
 
     REMOVE_CACHE_PATH ${ABS_PATH}
 }
