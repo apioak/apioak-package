@@ -12,7 +12,7 @@ CHECK_COMMAND()
 INSTALL_BASE_TOOLS()
 {
     sudo rm -f /usr/bin/cmake
-    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel redhat-lsb
+    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel
 }
 
 INSTALL_FPM()
@@ -65,6 +65,9 @@ BUILD_PACKAGE()
 
     sudo mkdir -p /tmp/apioak/usr/local
     sudo mkdir -p /tmp/apioak/usr/bin
+
+    chown -R root:root /usr/local/apioak
+    chmod -R 755 /usr/local/apioak
 
     cp -rf /usr/local/apioak /tmp/apioak/usr/local/
     cp -rf /usr/local/apioak/bin/apioak /tmp/apioak/usr/bin/
