@@ -71,10 +71,6 @@ if [[ ${ITERATION} = "" ]]; then
     ITERATION=1
 fi
 
-echo "================================="
-echo "Build APIOAK Version: v${VERSION}"
-echo "================================="
-
 INSTALL_TOOLS
 
 REMOVE_CACHE
