@@ -76,6 +76,16 @@ INSTALL_TOOLS
 
 REMOVE_CACHE
 
+OPENRESTY_EXISTS=$(CHECK_COMMAND openresty)
+if [[ ${OPENRESTY_EXISTS} = "FAIL" ]]; then
+    INSTALL_OPENRESTY
+fi
+
+FPM_EXISTS=$(CHECK_COMMAND fpm)
+if [[ ${FPM_EXISTS} = "FAIL" ]]; then
+    INSTALL_FPM
+fi
+
 git clone -b v${VERSION} https://github.com/apioak/apioak.git
 cd apioak
 sudo luarocks install rockspec/apioak-master-0.rockspec --tree=deps --only-deps --local
