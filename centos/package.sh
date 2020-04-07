@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH=$PATH:/usr/local/bin
+
 CHECK_COMMAND()
 {
     if type $1 2>/dev/null; then
@@ -9,15 +11,31 @@ CHECK_COMMAND()
     fi
 }
 
-INSTALL_BASE_TOOLS()
+INSTALL_TOOLS()
 {
-    sudo rm -f /usr/bin/cmake
-    sudo yum -y install gcc gcc-c++ git make automake autoconf curl wget lua-devel libtool pcre-devel
+    sudo yum -y install gcc \
+                        gcc-c++ \
+                        git \
+                        make \
+                        automake \
+                        autoconf \
+                        curl \
+                        wget \
+                        lua-devel \
+                        libtool \
+                        pcre-devel \
+                        ruby \
+                        ruby-devel \
+                        rubygems \
+                        rubygems-devel \
+                        rpm-build \
+                        libffi \
+                        libffi-devel \
+                        luarocks
 }
 
 INSTALL_FPM()
 {
-    sudo yum -y install ruby ruby-devel rubygems rubygems-devel rpm-build libffi libffi-devel
     sudo gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
     sudo gem sources -l
     sudo gem update --system
@@ -32,60 +50,66 @@ INSTALL_OPENRESTY()
     sudo yum install -y openresty openresty-resty pcre-devel openssl-devel lua-devel libtool
 }
 
-INSTALL_LUAROCKS()
+REMOVE_CACHE()
 {
-    sudo yum -y install luarocks
-}
-
-REMOVE_CACHE_PATH()
-{
-    sudo rm -rf /usr/local/apioak
     sudo rm -rf /tmp/apioak
-    sudo rm -rf $1/apioak
+    sudo rm -rf ${PWD}/apioak
 }
 
-REMOVE_CACHE_FILE()
-{
-    sudo rm -rf $1/*.rpm
-    sudo rm -rf $1/*.deb
-}
+VERSION=$1
+ITERATION=$2
 
-BUILD_PACKAGE()
-{
-    VERSION=$1
-    ITERATION=$2
-    ABS_PATH=${PWD}
+if [[ ${VERSION} = "" ]]; then
+    exit 1
+fi
 
-    REMOVE_CACHE_PATH ${ABS_PATH}
-    REMOVE_CACHE_FILE ${ABS_PATH}
+if [[ ${ITERATION} = "" ]]; then
+    ITERATION=1
+fi
 
-    git clone -b v${VERSION} https://github.com/apioak/apioak.git
-    cd apioak
-    sudo luarocks make rockspec/apioak-master-0.rockspec --tree=/usr/local/apioak/deps --local
+echo "================================="
+echo "Build APIOAK Version: v${VERSION}"
+echo "================================="
 
-    sudo mkdir -p /tmp/apioak/usr/local
-    sudo mkdir -p /tmp/apioak/usr/bin
+INSTALL_TOOLS
 
-    chown -R root:root /usr/local/apioak
-    chmod -R 755 /usr/local/apioak
+REMOVE_CACHE
 
-    cp -rf /usr/local/apioak /tmp/apioak/usr/local/
-    cp -rf /usr/local/apioak/bin/apioak /tmp/apioak/usr/bin/
+OPENRESTY_EXISTS=$(CHECK_COMMAND openresty)
+if [[ ${OPENRESTY_EXISTS} = "FAIL" ]]; then
+    INSTALL_OPENRESTY
+fi
 
-    sudo make uninstall
-    cd ${ABS_PATH}
+FPM_EXISTS=$(CHECK_COMMAND fpm)
+if [[ ${FPM_EXISTS} = "FAIL" ]]; then
+    INSTALL_FPM
+fi
 
-    fpm -f -s dir -t rpm -n apioak \
-        -m 'Janko <shuaijinchao@gmail.com>' \
-        -v ${VERSION} \
-        --iteration ${ITERATION}.el7 \
-        --description 'APIOAK is complete lifecycle management API gateway.' \
-        --license "Apache License 2.0"  \
-        -C /tmp/apioak \
-        -p ${ABS_PATH} \
-        --url 'https://apioak.com' \
-        -d 'openresty >= 1.15.8.2' \
-        -d 'luarocks >= 2.3.0'
+git clone -b v${VERSION} https://github.com/apioak/apioak.git
+cd apioak
+sudo luarocks install rockspec/apioak-master-0.rockspec --tree=deps --only-deps --local
 
-    REMOVE_CACHE_PATH ${ABS_PATH}
-}
+wget https://github.com/apioak/dashboard/releases/download/v${VERSION}/dashboard-${VERSION}.tar.gz
+tar -zxvf dashboard-${VERSION}.tar.gz
+rm -f dashboard-${VERSION}.tar.gz
+
+sudo mkdir -p /tmp/apioak/usr/local/apioak
+sudo mkdir -p /tmp/apioak/usr/bin
+
+chown -R root.root apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md
+chmod -R 755 apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md
+
+cp -rf apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md /tmp/apioak/usr/local/apioak/
+cp -rf bin/apioak /tmp/apioak/usr/bin/
+
+fpm -f -s dir -t rpm -n apioak \
+    -m 'Janko <shuaijinchao@gmail.com>' \
+    -v ${VERSION} \
+    --iteration ${ITERATION}.el7 \
+    --description 'APIOAK is complete lifecycle management API gateway.' \
+    --license "Apache License 2.0"  \
+    -C /tmp/apioak \
+    -p ${PWD} \
+    --url 'https://apioak.com' \
+    -d 'openresty >= 1.15.8.2' \
+    -d 'luarocks >= 2.3.0'
