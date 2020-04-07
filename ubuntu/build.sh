@@ -60,7 +60,10 @@ REMOVE_CACHE()
 VERSION=$1
 ITERATION=$2
 
-if [[ ${VERSION} = "" ]]; then
+if [[ ${VERSION} =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    echo "Build APIOAK Version: v${VERSION}"
+else
+    echo "Build Version Invalid, Example: ./build.sh 0.1.0"
     exit 1
 fi
 
@@ -97,10 +100,10 @@ rm -f dashboard-${VERSION}.tar.gz
 sudo mkdir -p /tmp/apioak/usr/local/apioak
 sudo mkdir -p /tmp/apioak/usr/bin
 
-chown -R root.root apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md
-chmod -R 755 apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md
+chown -R root.root apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md
+chmod -R 755 apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md
 
-cp -rf apioak bin conf logs dashboard COPYRIGHT README.md README_CN.md /tmp/apioak/usr/local/apioak/
+cp -rf apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md /tmp/apioak/usr/local/apioak/
 cp -rf bin/apioak /tmp/apioak/usr/bin/
 
 fpm -f -s dir -t deb -n apioak \
