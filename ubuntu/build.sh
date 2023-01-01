@@ -89,17 +89,13 @@ git clone -b v${VERSION} https://github.com/apioak/apioak.git
 cd apioak
 sudo luarocks install rockspec/apioak-master-0.rockspec --tree=deps --only-deps --local
 
-wget https://github.com/apioak/dashboard/releases/download/v${VERSION}/dashboard-${VERSION}.tar.gz
-tar -zxvf dashboard-${VERSION}.tar.gz
-rm -f dashboard-${VERSION}.tar.gz
-
 sudo mkdir -p /tmp/apioak/usr/local/apioak
 sudo mkdir -p /tmp/apioak/usr/bin
 
-chown -R root.root apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md
-chmod -R 755 apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md
+chown -R root.root apioak bin conf logs deps COPYRIGHT README.md README_CN.md
+chmod -R 755 apioak bin conf logs deps COPYRIGHT README.md README_CN.md
 
-cp -rf apioak bin conf logs deps dashboard COPYRIGHT README.md README_CN.md /tmp/apioak/usr/local/apioak/
+cp -rf apioak bin conf logs deps COPYRIGHT README.md README_CN.md /tmp/apioak/usr/local/apioak/
 cp -rf bin/apioak /tmp/apioak/usr/bin/
 
 fpm -f -s dir -t deb -n apioak \
